@@ -1,14 +1,14 @@
 - name: Install http and php etc
-  yum:
+  apt:
     name: "{{ item }}"
-    state: present
+    state: present    
   with_items:
-   - httpd
+   - apache2
    - php
    - php-mysql
    - git
-   - libsemanage-python
-   - libselinux-python
+   - python-semanage
+   - python-selinux 
 
 - name: insert iptables rule for httpd
   lineinfile:
@@ -22,7 +22,7 @@
 
 - name: http service state
   service:
-    name: httpd
+    name: apache2
     state: started
     enabled: yes
 

@@ -2,14 +2,15 @@
 # tasks file for db
 #
 - name: Install Mysql package
-  yum:
+  apt:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items:
    - mysql-server
-   - MySQL-python
-   - libselinux-python
-   - libsemanage-python
+   - python-mysqldb
+   - python-semanage
+   - python-selinux
+   
 
 - name: Configure SELinux to start mysql on any port
   seboolean:
@@ -27,7 +28,7 @@
 
 - name: Start Mysql Service
   service:
-    name: mysqld
+    name: mysql
     state: started
     enabled: yes
 
