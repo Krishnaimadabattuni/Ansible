@@ -1,0 +1,10 @@
+---
+- name: Installing s/w
+  hosts: webserver
+  tasks:
+   - name: installing java
+     apt:
+      name: "{{a}}"
+      state: "{{b}}"
+      update_cache: "{{c}}"
+...

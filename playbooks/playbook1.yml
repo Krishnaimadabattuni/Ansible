@@ -1,0 +1,54 @@
+---
+- name: creating dir and copying files
+  hosts: all
+  tasks:
+   - name: Create dir
+     file:
+      name: /tmp/dir1
+      state: directory
+   - name: Copy the /etc/passwd
+     copy:
+      src: /etc/passwd
+      dest: /tmp/dir1
+- name: Install git
+  hosts: all
+  tasks:
+   - name: Install git
+     apt:
+      name: git
+      state: present
+      update_cache: yes
+   - name: clone a remote git
+     git:
+      repo: https://github.com/intelliqittrainings/ansible_playbooks_roles.git
+      dest: /home/ubuntu/kubernetes
+- name: configuring tomcat6
+  hosts: all
+  tasks:
+   - name: Install tomcat
+     apt: 
+      name: tomcat8
+      state: present
+   - name: copy tomcat-users.xml
+     copy:
+      src: /home/ubuntu/tomcat-users.xml
+      dest: /etc/tomcat8
+   - name: changing the port
+     replace:
+      regexp: 9090
+      replace: 9091
+      path: /etc/tomcat8/server.xml
+   - name: restart tomcat8
+     service:
+      name: tomcat8
+      state: restarted
+   - name: check url responce of server1
+     uri: 
+      url: http://172.31.22.72:9091
+      status_code: 200
+   - name: check url responce of server2
+     uri:
+      url: http://172.31.26.65:9091
+      status_code: 200
+
+...

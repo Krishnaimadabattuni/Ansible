@@ -1,0 +1,19 @@
+
+- name: apply common configuration to all nodes
+  hosts: all
+  become: true  
+  roles:
+   - common
+
+- name: configure and deploy the webservers and application code
+  hosts: webservers
+  become: true
+  roles:
+   - web
+
+- name: deploy MYSQL and configure the database
+  hosts: dbservers
+  become: true
+  roles:
+   - db
+

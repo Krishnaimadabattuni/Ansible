@@ -1,0 +1,10 @@
+---
+- name: uninstall apache
+  hosts: webserver
+  tasks:
+    - name: unstall apache
+      apt:
+       name: apache3
+       state: absent
+
+

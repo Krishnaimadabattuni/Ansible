@@ -1,0 +1,55 @@
+---
+- name: Configuring apache2
+  hosts: webserver
+  tasks:
+   - block:
+      - name: Install apache
+        
+        apt:
+         name: apache3
+         state: present
+        notify: check url response
+      - name: Edit index
+        copy:
+         content: "Welcome to MyWorld\n"
+         dest: /var/www/html/index.html
+        notify: Restart apache3
+     rescue:
+      - name: Install apache
+        apt:
+         name: apache2
+         state: present
+        notify: check url response
+      - name: Edit index
+        copy:
+         content: "Welcome to MyWorld\n"
+         dest: /var/www/html/index.html
+        notify: Restart apache2
+        register: a
+      - name: Display ouput of a varable
+        debug:
+         var: a
+      - name: Install
+        apt:
+         name: git
+         state: present
+        tags: git_install
+  handlers:
+   - name: Restart apache2
+     service:
+      name: apache2
+      state: restarted
+   - name: Restart apache3
+     service:
+      name: apache3
+      state: restarted
+   - name: check url response
+     uri:
+      url: "{{item}}"
+      status_code: 200
+     with_items:
+      - http://172.31.22.72
+
+
+...
+
